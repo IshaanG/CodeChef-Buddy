@@ -1,0 +1,16 @@
+beautifulsoup4==4.7.1
+bs4==0.0.1
+certifi==2019.6.16
+chardet==3.0.4
+get==2019.4.13
+idna==2.8
+post==2019.4.13
+public==2019.4.13
+pycrypto==2.6.1
+query-string==2019.4.13
+request==2019.4.13
+requests==2.22.0
+selenium==3.141.0
+soupsieve==1.9.2
+termcolor==1.1.0
+urllib3==1.25.3
