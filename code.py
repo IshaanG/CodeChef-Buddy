@@ -127,95 +127,112 @@ def login():
     payload['pass']=str['password']
     lang=str["language"]
     with requests.Session() as s:
+        while(1):
+            print("Type help to view commands")
+            # print(r.text)
+            str=input()
+            li=str.split(' ')
+            if(len(li)==2):
+                choice=li[0]
+                contest_c=li[1]
+                # print("Enter\np-Practice\nc-Contest\n")
+                # choice=input()
+                # if(choice=='c'):
+                #     print("Enter contest name")
+                # else:
+                #     print("Enter problem name")
+                # contest_c=input()
+                #print(make_dir.parse())
+                while True:
+                    print("Enter help to get a list of commands")
+                    print("Enter;-")
+                    inp=input()
+                    if(inp=="submit" and choice=='c'): #Not working for contest
+                        try:
+                            if(one_time_login==0):
+                                while(1):
+                                    print(colored("Logging in...","green"),end="\r")
+                                    ti=time.time()
+                                    p=s.get("https://www.codechef.com/",headers=headers)
+                                    soup=bs4.BeautifulSoup(p.text,'html.parser')
+                                    if(type(soup)!=type(None)):
+                                        break
+                                a=soup.find('input',attrs={"name":'form_build_id'})['value']
+                                payload['form_build_id']=a
+                                r=s.post('https://www.codechef.com/',data=payload,headers=headers)
+                                print(time.time()-ti)
+                                print(colored("Logged in     ","green"))
+                                one_time_login=one_time_login+1
+                            submit(s,contest_c,lang,'c')
+                        except:
+                            logout(s)
+                    elif(inp=="parse" and choice=='c'):  #Working for practice as well as contest but not parsing question and have to add multithreading
+                        try:
+                            make_dir.parse(s,contest_c,choice)
+                        except:
+                            logout(s)
+                    elif(inp=="test" and choice=='c'):
+                        varr=input()
+                        test.Test(contest_c,lang,varr)
+                    elif(inp=='open' and choice=='c'):  #complete
+                        openf()
+                    elif(inp=="upcontest"): #complete
+                        contest.get_comp(s,0)
+                    elif(inp=="ctest" and choice=='c'):
+                        xc=input("Enter Problem Name")
+                        test.Test_ac(f'{contest_c}/{xc}','Test_files',xc,lang,s)    #if entered wrong contest name in try
+                    elif(inp=='race'):     #complete
+                        contest.race(s,contest_c)
+                    elif(inp=="parse" and choice=="p"):
+                        try:
+                            make_dir.parse(s,contest_c,choice)
+                        except:
+                            logout(s)
+                    elif(inp=="open" and choice=='p'):
+                        webbrowser.open(f"https://www.codechef.com/problems/{contest_c}")
+                    elif(inp=='test' and choice=='p'):
+                        ti1=time.time()
+                        test.Test("Practice",lang,contest_c)
+                        print(time.time()-ti1)
+                    elif(inp=="ctest" and choice=='p'):
+                        test.Test_ac(f'Practice/{contest_c}','Test_files',contest_c,lang,s)
+                    elif(inp=="submit" and choice=="p"):
+                        try:
+                            if(one_time_login==0):
+                                while(1):
+                                    print(colored("Logging in...","green"),end="\r")
+                                    p=s.get("https://www.codechef.com/",headers=headers)
+                                    soup=bs4.BeautifulSoup(p.text,'html.parser')
+                                    if(type(soup)!=type(None)):
+                                        break
+                                a=soup.find('input',attrs={"name":'form_build_id'})['value']
+                                payload['form_build_id']=a
+                                r=s.post('https://www.codechef.com/',data=payload,headers=headers)
+                                print(colored("Logged in     ","green"))
+                            ti2=time.time()
+                            submit(s,contest_c,lang,'p')
+                            print(time.time()-ti2)
+                        except:
+                            logout(s)
+                    elif(inp=="help"):
+                        print("parse - Parsing Contest or Problem\nsubmit-Submitting Problem\nopen-Opening question\nrace-To parse contest as soon as contest start\ntest-To test your cases against standard io\nctest-To test custom cases against custom io\nquit-To leave the current mode")
+                    elif(inp=="quit"):
+                        break
+            elif(li[0]=="upcontest"):
+                with requests.Session() as s:
+                    contest.get_comp(s,0)
+                print("Upcontest")
+            elif(li[0]=="race"):
+                with requests.Session() as s:
+                    cont=input("Enter name of contest")
+                    contest.race(s,cont)
+                print("Entering Race")
+            elif(li[0]=="help"):
+                print("c {Contest Name}-To enter codechef in contest mode\np {Question Name}-To enter codechef in practice mode\nupcontest-To view upcoming contests\nrace-To parse contest as soon as contest start\nquit-to logout and quit the program")
 
-        # print(r.text)
-        str=input()
-        choice=str[0]
-        contest_c=str[2:]
-        # print("Enter\np-Practice\nc-Contest\n")
-        # choice=input()
-        # if(choice=='c'):
-        #     print("Enter contest name")
-        # else:
-        #     print("Enter problem name")
-        # contest_c=input()
-        #print(make_dir.parse())
-        while True:
-            print("Enter help to get a list of commands")
-            print("Enter;-")
-            inp=input()
-            if(inp=="submit" and choice=='c'): #Not working for contest
-                try:
-                    if(one_time_login==0):
-                        while(1):
-                            print(colored("Logging in...","green"),end="\r")
-                            ti=time.time()
-                            p=s.get("https://www.codechef.com/",headers=headers)
-                            soup=bs4.BeautifulSoup(p.text,'html.parser')
-                            if(type(soup)!=type(None)):
-                                break
-                        a=soup.find('input',attrs={"name":'form_build_id'})['value']
-                        payload['form_build_id']=a
-                        r=s.post('https://www.codechef.com/',data=payload,headers=headers)
-                        print(time.time()-ti)
-                        print(colored("Logged in     ","green"))
-                        one_time_login=one_time_login+1
-                    submit(s,contest_c,lang,'c')
-                except:
-                    logout(s)
-            elif(inp=="parse" and choice=='c'):  #Working for practice as well as contest but not parsing question and have to add multithreading
-                try:
-                    make_dir.parse(s,contest_c,choice)
-                except:
-                    logout(s)
-            elif(inp=="test" and choice=='c'):
-                varr=input()
-                test.Test(contest_c,lang,varr)
-            elif(inp=='open' and choice=='c'):  #complete
-                openf()
-            elif(inp=="upcontest"): #complete
-                contest.get_comp(s,0)
-            elif(inp=="ctest" and choice=='c'):
-                xc=input("Enter Problem Name")
-                test.Test_ac(f'{contest_c}/{xc}','Test_files',xc,lang,s)    #if entered wrong contest name in try
-            elif(inp=='race'):     #complete
-                contest.race(s,contest_c)
-            elif(inp=="parse" and choice=="p"):
-                try:
-                    make_dir.parse(s,contest_c,choice)
-                except:
-                    logout(s)
-            elif(inp=="open" and choice=='p'):
-                webbrowser.open(f"https://www.codechef.com/problems/{contest_c}")
-            elif(inp=='test' and choice=='p'):
-                ti1=time.time()
-                test.Test("Practice",lang,contest_c)
-                print(time.time()-ti1)
-            elif(inp=="ctest" and choice=='p'):
-                test.Test_ac(f'Practice/{contest_c}','Test_files',contest_c,lang,s)
-            elif(inp=="submit" and choice=="p"):
-                try:
-                    if(one_time_login==0):
-                        while(1):
-                            print(colored("Logging in...","green"),end="\r")
-                            p=s.get("https://www.codechef.com/",headers=headers)
-                            soup=bs4.BeautifulSoup(p.text,'html.parser')
-                            if(type(soup)!=type(None)):
-                                break
-                        a=soup.find('input',attrs={"name":'form_build_id'})['value']
-                        payload['form_build_id']=a
-                        r=s.post('https://www.codechef.com/',data=payload,headers=headers)
-                        print(colored("Logged in     ","green"))
-                    ti2=time.time()
-                    submit(s,contest_c,lang,'p')
-                    print(time.time()-ti2)
-                except:
-                    logout(s)
-            elif(inp=="help"):
-                print("parse - Parsing Contest or Problem\nsubmit-Submitting Problem\nopen-Opening question\nupcontest-To get a list of upcoming contest\nrace-To parse contest as soon as contest start\ntest-To test your cases against standard io\nctest-To test custom cases against custom io\n")
-            elif(inp=="quit"):
+            elif(li[0]=="quit"):
                 logout(s)
-                break
+                break;
 
 
 if __name__=="__main__":
@@ -224,7 +241,6 @@ if __name__=="__main__":
     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:67.0) Gecko/20100101 Firefox/67.0',
     'cache-control': 'private, max-age=0, no-cache'
 }
-    print("c {Contest Name}\np {Question Name}")
     a=time.time()
     login()         #better structure needed
     print(time.time()-a)
