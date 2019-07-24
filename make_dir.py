@@ -156,12 +156,12 @@ def test_ques(li, contest_code, s):
     print("Creating Testing files")
     rem = 0
     while(i < len(li)):
-        print(f"Running it {i}st time")
+        #print(f"Running it {i} time")
         obj = s.get(
             f"https://www.codechef.com/{contest_code}/status/{li[i]}?sort_by=All&language=44&status=15&Submit=GO")
         soup = bs4.BeautifulSoup(obj.text, 'html.parser')
         ans = soup.text
-        print(type(ans))
+        # print(type(ans))
         ans = (ans[ans.find("IDDate/TimeUserResultTimeMemLangSolution")+40:])
         ans = ans.replace("\n", "")
         ans = ans.replace(" ", "")
