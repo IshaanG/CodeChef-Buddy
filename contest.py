@@ -8,16 +8,16 @@ import sys
 from threading import Timer
 
 
-def get_comp(s,x):
+def get_comp(s, x):
     while True:
         try:
             url = 'https://www.codechef.com/contests'
             z = s.get(url)
             soup = bs4.BeautifulSoup(z.text, 'html.parser')
-            #print(table)
+            # print(table)
             table = soup.find_all('table', attrs={'class': 'dataTable'})[1]
             table = table.find('tbody')
-            if(x==0):
+            if(x == 0):
                 print(table.text)
             break
         except:
@@ -27,23 +27,22 @@ def get_comp(s,x):
 
 
 def race(s, pname):
-    x=pname[len(pname)-1]
-    pname=pname[0:len(pname)-1]
+    x = pname[len(pname)-1]
+    pname = pname[0:len(pname)-1]
     print(pname)
     print("Coming to race")
-    str = get_comp(s,1)
+    str = get_comp(s, 1)
     ra = str.find_all('tr')
     for i in range(len(ra)):
         x = ra[i].find_all('td')
         if(x[0].getText() == pname):
             contesttime = x[2].getText()
             li = contesttime.split(' ')
-    #print(li)
-    countdown(li, s, pname,x)
+    # print(li)
+    countdown(li, s, pname, x)
 
 
-
-def countdown(ctime, s, pname,x):
+def countdown(ctime, s, pname, x):
     print("Coming to countdown")
     now = datetime.now()
     t2 = ctime[4]
@@ -65,9 +64,7 @@ def countdown(ctime, s, pname,x):
         print(contest_time-current_time, end="\r")
         #
         time.sleep(1)
-    make_dir.parse(pname+x,s)
+    make_dir.parse(s, pname, "c")
     #
     # print("he")
     #make_dir.parse(s, pname)
-
-

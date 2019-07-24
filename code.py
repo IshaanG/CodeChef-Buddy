@@ -122,7 +122,7 @@ def login():
     decrypted.decode('utf-8')
     # str=json.load(open('new.json','r'))
     str = json.loads(decrypted)
-    print(str)
+    #print(str)
     payload['name']=str['username']
     payload['pass']=str['password']
     lang=str["language"]

@@ -3,11 +3,12 @@ import os
 import difflib
 import code
 
-def Test(path, lang,varr):
+
+def Test(path, lang, varr):
     print("Entering Test")
     try:
         # x=input()
-        path=path+'/'+varr
+        path = path+'/'+varr
         print(path)
         if lang == "44":
             try:
@@ -38,7 +39,7 @@ def Test(path, lang,varr):
             if entry.endswith('.inp'):
                 print(entry)
                 if lang == "11" or lang == "44":
-                    #print("00")
+                    # print("00")
                     subprocess.call(
                         f"{path}/answer < {path}/{entry} > {path}/{os.path.splitext(entry)[0]}.out", shell=True)
                 elif lang == "116":
@@ -51,8 +52,8 @@ def Test(path, lang,varr):
                     with open(f"{path}/{os.path.splitext(entry)[0]}.oac", 'r') as file2:
                         c1 = file1.read()
                         c2 = file2.read()
-                        # # print(c1)
-                        # # print(c2)
+                        # print(c1)
+                        # print(c2)
                         # diff = difflib.context_diff(c1, c2)
                         # print(''.join(diff))
                         # # try:
@@ -77,39 +78,42 @@ def Test(path, lang,varr):
                             print('AC :)')
     except:
         print("Not working")
-        code.logout(s)
+        pass
 
 
-def Test_ac(path_code, path_ac, problem, lang,s):
+def Test_ac(path_code, path_ac, problem, lang, s):
     try:
-    # subprocess.call(
-    #     f"g++ {path_code}/answer.cpp -o {path_code}/answer", shell=True)
-        #print(path_code)
-        #print(path_ac)
-        #print(problem)
-        #print(lang)
+        # subprocess.call(
+        #     f"g++ {path_code}/answer.cpp -o {path_code}/answer", shell=True)
+        # print(path_code)
+        # print(path_ac)
+        # print(problem)
+        # print(lang)
         if lang == "44":
             try:
                 subprocess.call(
                     f"g++ {path_code}/answer.cpp -o {path_code}/answer", shell=True)
-                #print("compiled")
+                # print("compiled")
             except:
                 print("Compilation Error")
                 return
         elif lang == "116":
             try:
-                subprocess.call(f"python -m compileall -b {path_code}/answer.py", shell=True)
+                subprocess.call(
+                    f"python -m compileall -b {path_code}/answer.py", shell=True)
             except:
                 print("Compilation Error")
                 return
         elif lang == "11":
             try:
-                subprocess.call(f"gcc {path_code}/answer.c -o {path_code}/answer", shell=True)
+                subprocess.call(
+                    f"gcc {path_code}/answer.c -o {path_code}/answer", shell=True)
             except:
                 print("Compilation Error")
                 return
 
-        subprocess.call(f"g++ {path_ac}/{problem}.cpp -o {path_ac}/{problem}", shell=True)
+        subprocess.call(
+            f"g++ {path_ac}/{problem}.cpp -o {path_ac}/{problem}", shell=True)
         #print("ac compiled")
         entries = os.listdir(path_code)
         for entry in entries:
@@ -117,12 +121,15 @@ def Test_ac(path_code, path_ac, problem, lang,s):
                 print(entry)
                 if(lang == "11" or lang == "44"):
                     #print("in here")
-                    subprocess.call(f"{path_code}/answer < {path_code}/{entry} > {path_code}/{os.path.splitext(entry)[0]}.out", shell=True)
+                    subprocess.call(
+                        f"{path_code}/answer < {path_code}/{entry} > {path_code}/{os.path.splitext(entry)[0]}.out", shell=True)
                     #print("generated out")
                 elif lang == "116":
-                    subprocess.call(f"{path_code}/answer.pyc < {path_code}/{entry} > {path_code}/{os.path.splitext(entry)[0]}.out", shell=True)
-                subprocess.call(f"{path_ac}/{problem} < {path_code}/{entry} > {path_ac}/{os.path.splitext(entry)[0]}.oac", shell=True)
-        #print("1")
+                    subprocess.call(
+                        f"{path_code}/answer.pyc < {path_code}/{entry} > {path_code}/{os.path.splitext(entry)[0]}.out", shell=True)
+                subprocess.call(
+                    f"{path_ac}/{problem} < {path_code}/{entry} > {path_ac}/{os.path.splitext(entry)[0]}.oac", shell=True)
+        # print("1")
 
         entries_code = os.listdir(path_code)
         for entry_code in entries_code:
@@ -146,6 +153,8 @@ def Test_ac(path_code, path_ac, problem, lang,s):
                         d = difflib.Differ()
                         diffs = [x for x in d.compare(
                             c1, c2) if x[0] in ('+', '-')]
+                        diffs = list(filter(lambda a: a != '+ \n', diffs))
+
                         if diffs:
                             print("Your output:")
                             print(c1)
