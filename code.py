@@ -168,6 +168,20 @@ def login():
                             logout(s)
                     elif(inp=="parse" and choice=='c'):  #Working for practice as well as contest but not parsing question and have to add multithreading
                         try:
+                            if(one_time_login==0):
+                                while(1):
+                                    print(colored("Logging in...","green"),end="\r")
+                                    ti=time.time()
+                                    p=s.get("https://www.codechef.com/",headers=headers)
+                                    soup=bs4.BeautifulSoup(p.text,'html.parser')
+                                    if(type(soup)!=type(None)):
+                                        break
+                                a=soup.find('input',attrs={"name":'form_build_id'})['value']
+                                payload['form_build_id']=a
+                                r=s.post('https://www.codechef.com/',data=payload,headers=headers)
+                                print(time.time()-ti)
+                                print(colored("Logged in     ","green"))
+                                one_time_login=one_time_login+1
                             make_dir.parse(s,contest_c,choice)
                         except:
                             logout(s)
