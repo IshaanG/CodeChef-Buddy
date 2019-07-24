@@ -9,7 +9,25 @@ Install dependencies
 
     $ pip install -r requirements.txt
 
+Edit the file new.json with your login credentials and language preference
+
+    {
+    "username": "<id>",
+    "password": "<pass>",
+    "language": "44"
+    }
+
+Language codes
+
+    C++    : 44
+    C      : 11
+    Python : 116
+
+Encrypt the credentials
+
+    $ python encrypt.py
+
 Run the program
 
-    python code.py
+    $ python code.py
 
