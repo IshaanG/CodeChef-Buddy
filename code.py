@@ -19,6 +19,7 @@ key = hashlib.sha256(master_password.encode('utf-8')).digest()
 def logout(s):
     print("Logging you out")
     s.get("https://www.codechef.com/logout")
+    one_time_login = 0
 
 
 def get_token(str):
@@ -47,7 +48,7 @@ def result(obj, s):
     # print(status_code)
 
     try:
-        print(colored("Submitting.....", 'green'))
+        print(colored("Submitting...", 'green'))
         while True:
             a1 = s.get(
                 f'https://www.codechef.com/get_submission_status/{status_code}/', headers=headers)
@@ -82,7 +83,7 @@ def result(obj, s):
         print(e)
         logout(s)
         pass
-    print("Status code printed")
+    #print("Status code printed")
     return 0
 
     #t1 = threading.Thread(target=get_token, attrs={p.text})
@@ -90,18 +91,19 @@ def result(obj, s):
 
 def submit(s, contest_c, lang, xy):
     if(xy != 'p'):
-        prob = input("Enter problem to be submitted")
+        prob = input("Enter problem to be submitted: ")
     else:
         prob = contest_c
     while True:
+        print(colored(f"Submitting {prob}...", "green"))
         p = s.get(f"https://www.codechef.com/submit/{prob}", headers=headers)
         #xyz = time.time()
         form_token = get_token(p.text)
         # print(time.time()-xyz)
         form_build_id = get_id(p.text)
         # print(time.time()-xyz)
-        print(form_token)
-        print(form_build_id)
+        # print(form_token)
+        # print(form_build_id)
         payload = {
             'form_build_id': form_build_id,
             'form_token': form_token,
@@ -121,10 +123,10 @@ def submit(s, contest_c, lang, xy):
             f"https://www.codechef.com/submit/{prob}", data=payload, files=myfile, headers=headers)
         x = obj.url.split('/')[-1]
         if(x.isdigit() == True):
-            print(x)
+            print(colored(f"Submission id: {x}", "blue"))
             break
         fi.close()
-    print("Problem submitted successfully")
+    print(colored("Problem submitted successfully", "green"))
     result(obj, s)
 
 
@@ -150,7 +152,7 @@ def login():
     lang = str["language"]
     with requests.Session() as s:
         while(1):
-            print("Type help to view commands")
+            print("----------------Type help to view commands----------------")
             # print(r.text)
             str = input()
             li = str.split(' ')
@@ -166,8 +168,8 @@ def login():
                 # contest_c=input()
                 # print(make_dir.parse())
                 while True:
-                    print("Enter help to get a list of commands")
-                    print("Enter;-")
+                    print("----------------Type help to view commands----------------")
+                    print(colored("ENTER: ", attrs=['bold']))
                     inp = input()
                     if(inp == "submit" and choice == 'c'):  # Not working for contest
                         try:
@@ -187,8 +189,8 @@ def login():
                                 payload['form_build_id'] = a
                                 s.post('https://www.codechef.com/',
                                        data=payload, headers=headers)
-                                print(time.time()-ti)
-                                print(colored("Logged in     ", "green"))
+                                # print(time.time()-ti)
+                                print(colored("Logged in     ", "yellow"))
                                 one_time_login = one_time_login+1
                             submit(s, contest_c, lang, 'c')
                         except:
@@ -212,21 +214,21 @@ def login():
                                 payload['form_build_id'] = a
                                 s.post('https://www.codechef.com/',
                                        data=payload, headers=headers)
-                                print(time.time()-ti)
+                                # print(time.time()-ti)
                                 print(colored("Logged in     ", "green"))
                                 one_time_login = one_time_login+1
                             make_dir.parse(s, contest_c, choice)
                         except:
                             logout(s)
                     elif(inp == "test" and choice == 'c'):
-                        varr = input()
+                        varr = input("Enter problem name: ")
                         test.Test(contest_c, lang, varr)
                     elif(inp == 'open' and choice == 'c'):  # complete
                         openf()
                     elif(inp == "upcontest"):  # complete
                         contest.get_comp(s, 0, 1)
                     elif(inp == "ctest" and choice == 'c'):
-                        xc = input("Enter Problem Name")
+                        xc = input("Enter problem name: ")
                         # if entered wrong contest name in try
                         test.Test_ac(f'{contest_c}/{xc}',
                                      'Test_files', xc, lang, s)
@@ -243,7 +245,7 @@ def login():
                     elif(inp == 'test' and choice == 'p'):
                         ti1 = time.time()
                         test.Test("Practice", lang, contest_c)
-                        print(time.time()-ti1)
+                        # print(time.time()-ti1)
                     elif(inp == "ctest" and choice == 'p'):
                         test.Test_ac(
                             f'Practice/{contest_c}', 'Test_files', contest_c, lang, s)
@@ -268,11 +270,11 @@ def login():
                                 one_time_login = 1
                             ti2 = time.time()
                             submit(s, contest_c, lang, 'p')
-                            print(time.time()-ti2)
+                            # print(time.time()-ti2)
                         except:
                             logout(s)
                     elif(inp == "help"):
-                        print("parse - Parsing Contest or Problem\nsubmit-Submitting Problem\nopen-Opening question\ntest-To test your cases against standard io\nctest-To test custom cases against custom io\nquit-To leave the current mode")
+                        print(colored("parse - Parsing Contest or Problem\nsubmit-Submitting Problem\nopen-Opening question\ntest-To test your cases against standard io\nctest-To test custom cases against custom io\nquit-To leave the current mode", "cyan"))
                     elif(inp == "quit"):
                         break
             elif(li[0] == "upcontest"):
@@ -293,7 +295,7 @@ def login():
                     contest.race(s, li[1])
                 #print("Entering Race")
             elif(li[0] == "help"):
-                print("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program")
+                print(colored("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program", "cyan"))
 
             elif(li[0] == "quit"):
                 logout(s)
@@ -308,4 +310,4 @@ if __name__ == "__main__":
     }
     a = time.time()
     login()  # better structure needed
-    print(time.time()-a)
+    # print(time.time()-a)

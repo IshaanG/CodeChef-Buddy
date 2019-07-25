@@ -5,14 +5,15 @@ import os
 import practice
 import threading
 import subprocess
+from termcolor import colored
 
 
 def fuc(li, contest_code, s):
-    print("Coming to function")
+    #print("Coming to function")
     try:
         os.mkdir(contest_code)
     except:
-        print("Directory already found")
+        print(colored("Directory already found!", "red"))
     path = contest_code+'/'
     i = 0
     while (i < len(li)):
@@ -28,7 +29,7 @@ def fuc(li, contest_code, s):
         y = bs4.BeautifulSoup(x.text, 'html.parser')
         z = y.find('div', class_='node clear-block')
         if(type(z) == type(None)):
-            print("Removing Error")
+            print(colored("Resolving Error", "red"))
             i = i-1
             continue
         # print(type(z))
@@ -80,7 +81,7 @@ def fuc(li, contest_code, s):
 
 
 def fuc1(contest_code, s):
-    print("Coming to fuc1")
+    #print("Coming to fuc1")
     try:
         os.mkdir("Practice")
     except:
@@ -108,24 +109,24 @@ def fuc1(contest_code, s):
 
 
 def make_dir(contest_code, s, choice):
-    print("Entering to main dir")
-    aa = time.time()
+    #print("Entering to main dir")
+    #aa = time.time()
     if(choice == 'c'):
-        print("Coming to make dir")
+        print(colored("Copying problem codes...", "magenta"))
         q_list = []
         url = "https://www.codechef.com/"+contest_code
         a = time.time()
         z = s.get(url)
-        print(time.time()-a)
+        # print(time.time()-a)
         soup = bs4.BeautifulSoup(z.text, 'html.parser')
         pcode = soup.find('tbody')
         x = pcode.find_all('td')
         for i in range(1, len(x), 4):
             print(x[i].text)
             q_list.append(x[i].text)
-        print(time.time()-a)
+        # print(time.time()-a)
         # print("Going from make dir to fuc")
-        print("Making Directories....")
+        print(colored("Making Directories...", "magenta"))
         t1 = threading.Thread(target=fuc, args=(q_list, contest_code, s))
         t2 = threading.Thread(target=test_ques, args=(q_list, contest_code, s))
         t1.start()
@@ -135,13 +136,15 @@ def make_dir(contest_code, s, choice):
         # test_ques(q_list, contest_code, s)
         t1.join()
         t2.join()
-        bb = time.time()
-        print(bb-aa)
+        #bb = time.time()
+        # print(bb-aa)
+        print(colored("Parsed problem successfully", "green"))
+
     else:
-        print("Coming to right place")
+        print(colored("Copying problem codes...", "magenta"))
         fuc1(contest_code, s)
         test_ques1(contest_code, s)
-        print("Parsed problem successfully")
+        print(colored("Parsed problem successfully", "green"))
 
 
 def test_ques1(contest_code, s):
@@ -162,9 +165,9 @@ def test_ques1(contest_code, s):
         ans = ans.replace(" ", "")
         code = ans[0:8]
         if(code.isdigit() == False):
-            print("Removing error")
+            print(colored("Resolving error", "red"))
             continue
-        print(code)
+        print(f"Problem code: {code}")
         url = f"https://www.codechef.com/viewplaintext/{code}"
         text = requests.get(url)
         scode = bs4.BeautifulSoup(text.text, 'html.parser')
@@ -183,7 +186,7 @@ def test_ques(li, contest_code, s):
     except:
         pass
     i = 0
-    print("Creating Testing files")
+    print(colored("Creating testing files...", "magenta"))
     #rem = 0
     while(i < len(li)):
         # print(f"Running it {i} time")
@@ -196,7 +199,7 @@ def test_ques(li, contest_code, s):
         ans = ans.replace("\n", "")
         ans = ans.replace(" ", "")
         code = ans[0:8]
-        print(code)
+        print(f"Problem code: {code}")
         if(code == "NoRecent"):
             break
         # if(code.isdigit() == False and rem <= 2):
