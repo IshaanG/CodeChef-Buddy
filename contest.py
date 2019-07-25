@@ -9,14 +9,14 @@ from threading import Timer
 from termcolor import colored
 
 
-def get_comp(s, x):
+def get_comp(s, x, q):
     while True:
         try:
             url = 'https://www.codechef.com/contests'
             z = s.get(url)
             soup = bs4.BeautifulSoup(z.text, 'html.parser')
             # print(table)
-            table = soup.find_all('table', attrs={'class': 'dataTable'})[1]
+            table = soup.find_all('table', attrs={'class': 'dataTable'})[q]
             table = table.find('tbody')
             if(x == 0):
                 print(colored(table.text, "green"))
@@ -32,7 +32,7 @@ def race(s, pname):
     pname = pname[0:len(pname)-1]
     # print(pname)
     print(colored(f"Race to {pname}", "green"))
-    str = get_comp(s, 1)
+    str = get_comp(s, 1, 1)
     ra = str.find_all('tr')
     for i in range(len(ra)):
         x = ra[i].find_all('td')
@@ -56,13 +56,15 @@ def countdown(ctime, s, pname, x):
     # print(current_time)
     delay = (contest_time-current_time).total_seconds()
     # print(delay)
-    for i in range(int(delay)):
+    i = 0
+    while(i < int(delay)):
         now = datetime.now()
 
         current_time = timedelta(
             hours=now.hour, minutes=now.minute, seconds=now.second)
 
         print(contest_time-current_time, end="\r")
+        i = i + 1
         time.sleep(1)
     make_dir.parse(s, pname, "c")
     #

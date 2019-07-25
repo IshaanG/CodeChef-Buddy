@@ -4,6 +4,7 @@ import time
 import os
 import practice
 import threading
+import subprocess
 
 
 def fuc(li, contest_code, s):
@@ -13,13 +14,14 @@ def fuc(li, contest_code, s):
     except:
         print("Directory already found")
     path = contest_code+'/'
-    for i in range(len(li)):
+    i = 0
+    while (i < len(li)):
         path1 = path+li[i]
         print(path1)
         try:
             os.mkdir(path1)
         except:
-            #print("Dirrint(path1)ectory already found")
+            # print("Dirrint(path1)ectory already found")
             pass
         url = f'https://www.codechef.com/{contest_code}/problems/{li[i]}'
         x = s.get(url)
@@ -35,7 +37,9 @@ def fuc(li, contest_code, s):
         # print(z)   #content containing question input and output
         out = ""
         # print(type(z))
-        ques = z[z.find("as well")+10:z.find("### Example Input")]
+        ques = z[z.find("as well")+10:z.find("Author:")]
+        ques = ques.replace("\gt", ">")
+        ques = ques.replace("\lt", "<")
         try:
             if(z.find('### Example Input') == -1):
                 print(1/0)
@@ -64,6 +68,13 @@ def fuc(li, contest_code, s):
         f3 = open(path1+'/question.txt', 'w')
         print(ques, file=f3)
         f4 = open(path1+'/answer.cpp', 'w')
+        f1.close()
+        f2.close()
+        f3.close()
+        f4.close()
+        subprocess.call(
+            f"pandoc {path1}/question.txt -o {path1}/question.pdf", shell=True)
+        i = i+1
 
     print(li)
 
@@ -83,8 +94,16 @@ def fuc1(contest_code, s):
     f1 = open(f"Practice/{contest_code}/input.inp", 'w')
     f2 = open(f"Practice/{contest_code}/input.oac", 'w')
     f3 = open(f"Practice/{contest_code}/answer.cpp", 'w')
+    f4 = open(f"Practice/{contest_code}/question.txt", "w")
     print(l['input'], file=f1)
     print(l['output'], file=f2)
+    print(l['ques'], file=f4)
+    f1.close()
+    f2.close()
+    f3.close()
+    f4.close()
+    subprocess.call(
+        f"pandoc Practice/{contest_code}/question.txt -o Practice/{contest_code}/question.pdf", shell=True)
     return
 
 
@@ -105,7 +124,7 @@ def make_dir(contest_code, s, choice):
             print(x[i].text)
             q_list.append(x[i].text)
         print(time.time()-a)
-        #print("Going from make dir to fuc")
+        # print("Going from make dir to fuc")
         print("Making Directories....")
         t1 = threading.Thread(target=fuc, args=(q_list, contest_code, s))
         t2 = threading.Thread(target=test_ques, args=(q_list, contest_code, s))
@@ -154,7 +173,7 @@ def test_ques1(contest_code, s):
         fil = open(f"Test_files/{contest_code}.cpp", 'w')
         print(scode.getText(), file=fil)
         i = i+1
-    #print("Returning from test_ques1")
+    # print("Returning from test_ques1")
     return 0
 
 
@@ -165,9 +184,9 @@ def test_ques(li, contest_code, s):
         pass
     i = 0
     print("Creating Testing files")
-    rem = 0
+    #rem = 0
     while(i < len(li)):
-        #print(f"Running it {i} time")
+        # print(f"Running it {i} time")
         obj = s.get(
             f"https://www.codechef.com/{contest_code}/status/{li[i]}?sort_by=All&language=44&status=15&Submit=GO")
         soup = bs4.BeautifulSoup(obj.text, 'html.parser')
@@ -184,7 +203,7 @@ def test_ques(li, contest_code, s):
         #     print("Removing error")
         #     rem = rem+1
         #     continue
-        rem = 0
+        #rem = 0
         url = f"https://www.codechef.com/viewplaintext/{code}"
         text = requests.get(url)
         scode = bs4.BeautifulSoup(text.text, 'html.parser')

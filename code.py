@@ -124,6 +124,7 @@ def submit(s, contest_c, lang, xy):
             print(x)
             break
         fi.close()
+    print("Problem submitted successfully")
     result(obj, s)
 
 
@@ -209,8 +210,8 @@ def login():
                                 a = soup.find('input', attrs={"name": 'form_build_id'})[
                                     'value']
                                 payload['form_build_id'] = a
-                                r = s.post('https://www.codechef.com/',
-                                           data=payload, headers=headers)
+                                s.post('https://www.codechef.com/',
+                                       data=payload, headers=headers)
                                 print(time.time()-ti)
                                 print(colored("Logged in     ", "green"))
                                 one_time_login = one_time_login+1
@@ -223,7 +224,7 @@ def login():
                     elif(inp == 'open' and choice == 'c'):  # complete
                         openf()
                     elif(inp == "upcontest"):  # complete
-                        contest.get_comp(s, 0)
+                        contest.get_comp(s, 0, 1)
                     elif(inp == "ctest" and choice == 'c'):
                         xc = input("Enter Problem Name")
                         # if entered wrong contest name in try
@@ -276,15 +277,23 @@ def login():
                         break
             elif(li[0] == "upcontest"):
                 with requests.Session() as s:
-                    contest.get_comp(s, 0)
-                print("Upcontest")
+                    contest.get_comp(s, 0, 1)
+                print("Upcoming contests")
+            elif(li[0] == "prcontest"):
+                with requests.Session() as s:
+                    contest.get_comp(s, 0, 0)
+                print("Present Contests")
+            elif(li[0] == "pacontest"):
+                with requests.Session() as s:
+                    contest.get_comp(s, 0, 2)
+                print("Past Contests")
             elif(li[0] == "race"):
                 with requests.Session() as s:
                     #cont = input("Enter name of contest: ")
                     contest.race(s, li[1])
                 #print("Entering Race")
             elif(li[0] == "help"):
-                print("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nupcontest - To view upcoming contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program")
+                print("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program")
 
             elif(li[0] == "quit"):
                 logout(s)
