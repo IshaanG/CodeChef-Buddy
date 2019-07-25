@@ -6,6 +6,7 @@ import make_dir
 import threading
 import sys
 from threading import Timer
+from termcolor import colored
 
 
 def get_comp(s, x):
@@ -18,19 +19,19 @@ def get_comp(s, x):
             table = soup.find_all('table', attrs={'class': 'dataTable'})[1]
             table = table.find('tbody')
             if(x == 0):
-                print(table.text)
+                print(colored(table.text, "green"))
             break
         except:
             pass
-    print("Returning table")
+    #print("Returning table")
     return table
 
 
 def race(s, pname):
     x = pname[len(pname)-1]
     pname = pname[0:len(pname)-1]
-    print(pname)
-    print("Coming to race")
+    # print(pname)
+    print(colored(f"Race to {pname}", "green"))
     str = get_comp(s, 1)
     ra = str.find_all('tr')
     for i in range(len(ra)):
@@ -43,7 +44,7 @@ def race(s, pname):
 
 
 def countdown(ctime, s, pname, x):
-    print("Coming to countdown")
+    #print("Coming to countdown")
     now = datetime.now()
     t2 = ctime[4]
     li2 = t2.split(':')
@@ -51,10 +52,10 @@ def countdown(ctime, s, pname, x):
         hours=int(li2[0]), minutes=int(li2[1]), seconds=int(li2[2]))
     current_time = timedelta(
         hours=now.hour, minutes=now.minute, seconds=now.second)
-    print(contest_time)
-    print(current_time)
+    # print(contest_time)
+    # print(current_time)
     delay = (contest_time-current_time).total_seconds()
-    print(delay)
+    # print(delay)
     for i in range(int(delay)):
         now = datetime.now()
 
@@ -62,7 +63,6 @@ def countdown(ctime, s, pname, x):
             hours=now.hour, minutes=now.minute, seconds=now.second)
 
         print(contest_time-current_time, end="\r")
-        #
         time.sleep(1)
     make_dir.parse(s, pname, "c")
     #

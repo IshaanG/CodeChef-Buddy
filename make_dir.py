@@ -3,6 +3,7 @@ import bs4
 import time
 import os
 import practice
+import threading
 
 
 def fuc(li, contest_code, s):
@@ -18,7 +19,7 @@ def fuc(li, contest_code, s):
         try:
             os.mkdir(path1)
         except:
-            #print("Directory already found")
+            #print("Dirrint(path1)ectory already found")
             pass
         url = f'https://www.codechef.com/{contest_code}/problems/{li[i]}'
         x = s.get(url)
@@ -28,7 +29,7 @@ def fuc(li, contest_code, s):
             print("Removing Error")
             i = i-1
             continue
-        print(type(z))
+        # print(type(z))
         z = z.find('div', class_='content')
         z = str(z)
         # print(z)   #content containing question input and output
@@ -89,6 +90,7 @@ def fuc1(contest_code, s):
 
 def make_dir(contest_code, s, choice):
     print("Entering to main dir")
+    aa = time.time()
     if(choice == 'c'):
         print("Coming to make dir")
         q_list = []
@@ -103,10 +105,19 @@ def make_dir(contest_code, s, choice):
             print(x[i].text)
             q_list.append(x[i].text)
         print(time.time()-a)
-        print("Going from make dir to fuc")
-        fuc(q_list, contest_code, s)
-        print(time.time()-a)
-        test_ques(q_list, contest_code, s)
+        #print("Going from make dir to fuc")
+        print("Making Directories....")
+        t1 = threading.Thread(target=fuc, args=(q_list, contest_code, s))
+        t2 = threading.Thread(target=test_ques, args=(q_list, contest_code, s))
+        t1.start()
+        t2.start()
+        # fuc(q_list, contest_code, s)
+        # # print(time.time()-a)
+        # test_ques(q_list, contest_code, s)
+        t1.join()
+        t2.join()
+        bb = time.time()
+        print(bb-aa)
     else:
         print("Coming to right place")
         fuc1(contest_code, s)
@@ -143,7 +154,7 @@ def test_ques1(contest_code, s):
         fil = open(f"Test_files/{contest_code}.cpp", 'w')
         print(scode.getText(), file=fil)
         i = i+1
-    # print("Returning from test_ques1")
+    #print("Returning from test_ques1")
     return 0
 
 
@@ -167,10 +178,12 @@ def test_ques(li, contest_code, s):
         ans = ans.replace(" ", "")
         code = ans[0:8]
         print(code)
-        if(code.isdigit() == False and rem <= 2):
-            print("Removing error")
-            rem = rem+1
-            continue
+        if(code == "NoRecent"):
+            break
+        # if(code.isdigit() == False and rem <= 2):
+        #     print("Removing error")
+        #     rem = rem+1
+        #     continue
         rem = 0
         url = f"https://www.codechef.com/viewplaintext/{code}"
         text = requests.get(url)

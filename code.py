@@ -8,6 +8,7 @@ import webbrowser
 import make_dir
 from termcolor import colored
 import encryption
+import threading
 import hashlib
 
 master_password = "EAwpaeBxscpvSNkYQFc7Laq2"
@@ -84,6 +85,8 @@ def result(obj, s):
     print("Status code printed")
     return 0
 
+    #t1 = threading.Thread(target=get_token, attrs={p.text})
+
 
 def submit(s, contest_c, lang, xy):
     if(xy != 'p'):
@@ -92,8 +95,11 @@ def submit(s, contest_c, lang, xy):
         prob = contest_c
     while True:
         p = s.get(f"https://www.codechef.com/submit/{prob}", headers=headers)
+        #xyz = time.time()
         form_token = get_token(p.text)
+        # print(time.time()-xyz)
         form_build_id = get_id(p.text)
+        # print(time.time()-xyz)
         print(form_token)
         print(form_build_id)
         payload = {
@@ -147,7 +153,7 @@ def login():
             # print(r.text)
             str = input()
             li = str.split(' ')
-            if(len(li) == 2):
+            if(len(li) == 2 and li[0] != "race"):
                 choice = li[0]
                 contest_c = li[1]
                 # print("Enter\np-Practice\nc-Contest\n")
@@ -258,6 +264,7 @@ def login():
                                 r = s.post('https://www.codechef.com/',
                                            data=payload, headers=headers)
                                 print(colored("Logged in     ", "green"))
+                                one_time_login = 1
                             ti2 = time.time()
                             submit(s, contest_c, lang, 'p')
                             print(time.time()-ti2)
@@ -273,11 +280,11 @@ def login():
                 print("Upcontest")
             elif(li[0] == "race"):
                 with requests.Session() as s:
-                    cont = input("Enter name of contest")
-                    contest.race(s, cont)
-                print("Entering Race")
+                    #cont = input("Enter name of contest: ")
+                    contest.race(s, li[1])
+                #print("Entering Race")
             elif(li[0] == "help"):
-                print("c {Contest Name}-To enter codechef in contest mode\np {Question Name}-To enter codechef in practice mode\nupcontest-To view upcoming contests\nrace-To parse contest as soon as contest start\nquit-to logout and quit the program")
+                print("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nupcontest - To view upcoming contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program")
 
             elif(li[0] == "quit"):
                 logout(s)
