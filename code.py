@@ -192,7 +192,7 @@ def login():
                                        data=payload, headers=headers)
                                 # print(time.time()-ti)
                                 print(colored("Logged in     ", "yellow"))
-                                one_time_login = one_time_login+1
+                                one_time_login = 1
                             submit(s, contest_c, lang, 'c')
                         except:
                             logout(s)
@@ -217,7 +217,7 @@ def login():
                                        data=payload, headers=headers)
                                 # print(time.time()-ti)
                                 print(colored("Logged in     ", "green"))
-                                one_time_login = one_time_login+1
+                                one_time_login = 1
                             make_dir.parse(s, contest_c, choice)
                         except:
                             logout(s)

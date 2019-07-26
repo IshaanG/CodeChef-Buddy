@@ -207,6 +207,9 @@ def test_ques(li, contest_code, s):
         #     rem = rem+1
         #     continue
         #rem = 0
+        if(code.isdigit() == False):
+            print(colored("Resolving error", "red"))
+            continue
         url = f"https://www.codechef.com/viewplaintext/{code}"
         text = requests.get(url)
         scode = bs4.BeautifulSoup(text.text, 'html.parser')
