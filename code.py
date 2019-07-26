@@ -10,6 +10,7 @@ from termcolor import colored
 import encryption
 import threading
 import hashlib
+import user
 
 master_password = "EAwpaeBxscpvSNkYQFc7Laq2"
 
@@ -48,7 +49,7 @@ def result(obj, s):
     # print(status_code)
 
     try:
-        print(colored("Submitting...", 'green'))
+        print(colored("Getting verdict...", 'cyan'))
         while True:
             a1 = s.get(
                 f'https://www.codechef.com/get_submission_status/{status_code}/', headers=headers)
@@ -95,7 +96,7 @@ def submit(s, contest_c, lang, xy):
     else:
         prob = contest_c
     while True:
-        print(colored(f"Submitting {prob}...", "green"))
+        print(colored(f"Submitting {prob}...", "magenta"))
         p = s.get(f"https://www.codechef.com/submit/{prob}", headers=headers)
         #xyz = time.time()
         form_token = get_token(p.text)
@@ -156,7 +157,7 @@ def login():
             # print(r.text)
             str = input()
             li = str.split(' ')
-            if(len(li) == 2 and li[0] != "race"):
+            if(len(li) == 2 and li[0] != "race" and li[0] != "user" and li[0] != "getlist"):
                 choice = li[0]
                 contest_c = li[1]
                 # print("Enter\np-Practice\nc-Contest\n")
@@ -294,8 +295,20 @@ def login():
                     #cont = input("Enter name of contest: ")
                     contest.race(s, li[1])
                 #print("Entering Race")
+            elif(li[0] == "user"):
+                with requests.Session() as s:
+                    user.userinfo(s, li[1])
+            elif(li[0] == "getlist"):
+                with requests.session() as s:
+                    req = s.get(f'https://www.codechef.com/problems/{li[1]}/')
+                    soup = bs4.BeautifulSoup(req.text, 'html.parser')
+                    soup = soup.find('tbody')
+                    il = soup.find_all('a')
+                    for i in range(1, 1+int(li[2])*3, 3):
+                        print(colored(il[i].text, "yellow"))
+                    # print(soup)
             elif(li[0] == "help"):
-                print(colored("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program", "cyan"))
+                print(colored("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nuser <username> - To get user information\ngetlist <difficulty> <number> - Gets list of latest practice problems of selected difficulty\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program", "cyan"))
 
             elif(li[0] == "quit"):
                 logout(s)
