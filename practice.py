@@ -4,7 +4,7 @@ import re
 
 
 def practice(prob):
-    print("Entering practice function")
+    print(f"Parsing {prob}...")
     z = requests.get(f"https://www.codechef.com/problems/{prob}")
     soup = bs4.BeautifulSoup(z.text, 'html.parser')
     str = soup.text

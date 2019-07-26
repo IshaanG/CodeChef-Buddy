@@ -5,14 +5,14 @@ import code
 
 
 def Test(path, lang, varr):
-    print("Entering Test")
+    #print("Entering Test")
     try:
         # x=input()
         path = path+'/'+varr
         print(path)
         if lang == "44":
             try:
-                print("Coming to try")
+                #print("Coming to try")
                 subprocess.call(
                     f"g++ {path}/answer.cpp -o {path}/answer", shell=True)
                 print("File compiled")
@@ -37,7 +37,7 @@ def Test(path, lang, varr):
         entries = os.listdir(path)
         for entry in entries:
             if entry.endswith('.inp'):
-                print(entry)
+                # print(entry)
                 if lang == "11" or lang == "44":
                     # print("00")
                     subprocess.call(
@@ -118,7 +118,7 @@ def Test_ac(path_code, path_ac, problem, lang, s):
         entries = os.listdir(path_code)
         for entry in entries:
             if entry.endswith('.inp'):
-                print(entry)
+                # print(entry)
                 if(lang == "11" or lang == "44"):
                     #print("in here")
                     subprocess.call(
@@ -133,7 +133,7 @@ def Test_ac(path_code, path_ac, problem, lang, s):
 
         entries_code = os.listdir(path_code)
         for entry_code in entries_code:
-            print(entry_code)
+            # print(entry_code)
             if entry_code.endswith('.out'):
                 with open(f"{path_code}/{os.path.splitext(entry_code)[0]}.out", 'r') as file1:
                     # for entry_ac in entries_ac:

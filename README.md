@@ -31,3 +31,4 @@ Run the program
 
     $ python code.py
 
+CodeChef Buddy uses pandoc for generating pdf, please install pandoc and tex from your package manager for this feature.

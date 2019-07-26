@@ -91,7 +91,7 @@ def fuc1(contest_code, s):
     except:
         pass
     l = practice.practice(contest_code)
-    print(l)
+    # print(l)
     f1 = open(f"Practice/{contest_code}/input.inp", 'w')
     f2 = open(f"Practice/{contest_code}/input.oac", 'w')
     f3 = open(f"Practice/{contest_code}/answer.cpp", 'w')
