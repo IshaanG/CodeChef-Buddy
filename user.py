@@ -1,5 +1,5 @@
 import requests
-import bs4
+import bs4,re
 from termcolor import colored
 
 
@@ -9,6 +9,12 @@ def userinfo(s, name):
         url = f"https://www.codechef.com/users/{name}"
         x = s.get(url)
         soup = bs4.BeautifulSoup(x.text, 'html.parser')
+        ac=soup.text
+        ac=(ac[ac.find("Highcharts.chart('submissions-graph',"):ac.find("var problem_solved_count")])
+        ac=ac[ac.find("data:"):]
+        reg=re.compile("y:(\w+),")
+        lis=reg.findall(ac)
+        #print(lis)
         rating = soup.find_all("div", class_="rating-number")
         # print(rating[0].text)
 
@@ -16,7 +22,7 @@ def userinfo(s, name):
         if(type(li) != type(None)):
 
             li = li.find("small")
-            # print(li.text)
+            #print(li.text)
             details = soup.find("section", class_="user-details")
             str = details.text
             str = str[0:str.find("Teams List:")]
@@ -25,8 +31,15 @@ def userinfo(s, name):
             # str = str.replace("\n\n", "\n")
 
             print(colored(str+"Rating: "+rating[0].text+" "+li.text, "yellow"))
+            print("------------------------------------------")
+            print(colored("Correct Answer: "+lis[4],"green"))
+            print(colored("Partially Accepted: "+lis[0],"green"))
+            print(colored("Wrong Answer: "+lis[3],"red"))
+            print(colored("Time Limit Exceeded: "+lis[2],"red"))
+            print(colored("Runtime Error: "+lis[1],"yellow"))
             # print("Rating: "+rating[0].text+" "+li.text)
             break
         i = i+1
     if(i == 2):
         print("User not found")
+
