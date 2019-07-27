@@ -308,10 +308,10 @@ def login():
                     for i in range(1, 1+int(li[2])*3, 3):
                         print(colored(il[i].text, "yellow"))
                     # print(soup)
-            elif(li[0]=="getranking"):
-                inp=input("Enter College name")
+            elif(li[0]=="getrank"):
+                inp=input("Enter {c(country)/i(institution} {CountryName/InstitutionName}")
                 inp1=input("Enter number of users")
-                ranking.getranking(inp,int(inp1))
+                ranking.getranking(inp[0],inp[2:],int(inp1))
             elif(li[0] == "help"):
                 print(colored("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nuser <username> - To get user information\ngetlist <difficulty> <number> - Gets list of latest practice problems of selected difficulty\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program", "cyan"))
 
