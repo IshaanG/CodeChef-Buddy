@@ -136,7 +136,6 @@ def openf():
     inp = input("Enter problem name")
     webbrowser.open(f"https://www.codechef.com/problems/{inp}")
 
-
 def login():
     global one_time_login
     payload = {
@@ -298,7 +297,7 @@ def login():
                 #print("Entering Race")
             elif(li[0] == "user"):
                 with requests.Session() as s:
-                    user.userinfo(s, li[1])
+                    user.userinfo(s, li[1],0)
             elif(li[0] == "getlist"):
                 with requests.session() as s:
                     req = s.get(f'https://www.codechef.com/problems/{li[1]}/')
@@ -312,6 +311,21 @@ def login():
                 inp=input("Enter {c(country)/i(institution} {CountryName/InstitutionName}")
                 inp1=input("Enter number of users")
                 ranking.getranking(inp[0],inp[2:],int(inp1))
+            elif(li[0]=="compare"):
+                with requests.Session() as s:
+                    x=user.userinfo(s,li[1],1)
+                    # print(x)
+                    y=user.userinfo(s,li[2],1)
+                    z=["Correct Answer","Partially Submitted","Wrong Answers","TLE","Compilation Error"]
+                    print(colored('{:<35} {:^15} {:^15}'.format("Status",li[1],li[2]),"yellow"))
+                    for i in range(len(x)):
+                        print(colored('{:<35} {:^15} {:^15}'.format(z[i],x[i],y[i]),"yellow"))
+                    # print(y)
+            # elif(li[0]=="ccompare"):
+
+
+
+
             elif(li[0] == "help"):
                 print(colored("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nuser <username> - To get user information\ngetlist <difficulty> <number> - Gets list of latest practice problems of selected difficulty\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program", "cyan"))
 

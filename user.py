@@ -3,7 +3,8 @@ import bs4,re
 from termcolor import colored
 
 
-def userinfo(s, name):
+def userinfo(s, name,xy):
+    # print("Extracting details..")
     i = 0
     while(i < 2):
         url = f"https://www.codechef.com/users/{name}"
@@ -29,15 +30,17 @@ def userinfo(s, name):
             str = str.replace("\n\n\n", "")
             str = str.replace("\n\n", "\n")
             # str = str.replace("\n\n", "\n")
-
-            print(colored(str+"Rating: "+rating[0].text+" "+li.text, "yellow"))
-            print("------------------------------------------")
-            print(colored("Correct Answer: "+lis[4],"green"))
-            print(colored("Partially Accepted: "+lis[0],"green"))
-            print(colored("Wrong Answer: "+lis[3],"red"))
-            print(colored("Time Limit Exceeded: "+lis[2],"red"))
-            print(colored("Runtime Error: "+lis[1],"yellow"))
+            if(xy==0):
+                print(colored(str+"Rating: "+rating[0].text+" "+li.text, "yellow"))
+                print("------------------------------------------")
+                print(colored("Correct Answer: "+lis[4],"green"))
+                print(colored("Partially Accepted: "+lis[0],"green"))
+                print(colored("Wrong Answer: "+lis[3],"red"))
+                print(colored("Time Limit Exceeded: "+lis[2],"red"))
+                print(colored("Runtime Error: "+lis[1],"yellow"))
             # print("Rating: "+rating[0].text+" "+li.text)
+            list=[lis[4],lis[0],lis[3],lis[2],lis[1]]
+            return list
             break
         i = i+1
     if(i == 2):
