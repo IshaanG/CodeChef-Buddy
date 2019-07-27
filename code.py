@@ -16,6 +16,7 @@ import user
 master_password = "EAwpaeBxscpvSNkYQFc7Laq2"
 
 key = hashlib.sha256(master_password.encode('utf-8')).digest()
+one_time_login = 0
 
 
 def logout(s):
@@ -52,8 +53,8 @@ def result(obj, s):
     try:
         print(colored("Getting verdict...", 'cyan'))
         while True:
-            a1 = s.get(
-                f'https://www.codechef.com/get_submission_status/{status_code}/', headers=headers)
+            #a1 = s.get(f'https://www.codechef.com/get_submission_status/{status_code}/', headers=headers)
+            a1 = s.get(f'https://www.codechef.com/get_submission_status/{status_code}', headers=headers)
             # print(a1.text)
             # print(type(a1.text))
             try:
@@ -98,7 +99,10 @@ def submit(s, contest_c, lang, xy):
         prob = contest_c
     while True:
         print(colored(f"Submitting {prob}...", "magenta"))
-        p = s.get(f"https://www.codechef.com/submit/{prob}", headers=headers)
+        if(xy!='p'):
+            p = s.get(f"https://www.codechef.com/{contest_c}/submit/{prob}",headers=headers)
+        else:
+            p = s.get(f"https://www.codechef.com/submit/{prob}",headers=headers)
         #xyz = time.time()
         form_token = get_token(p.text)
         # print(time.time()-xyz)
@@ -122,7 +126,7 @@ def submit(s, contest_c, lang, xy):
         # print(f2.read())
         myfile = {'files[sourcefile]': fi}
         obj = s.post(
-            f"https://www.codechef.com/submit/{prob}", data=payload, files=myfile, headers=headers)
+            f"https://www.codechef.com/{contest_c}/submit/{prob}", data=payload, files=myfile, headers=headers)
         x = obj.url.split('/')[-1]
         if(x.isdigit() == True):
             print(colored(f"Submission id: {x}", "blue"))
@@ -157,7 +161,7 @@ def login():
             # print(r.text)
             str = input()
             li = str.split(' ')
-            if(len(li) == 2 and li[0] != "race" and li[0] != "user" and li[0] != "getlist"):
+            if(len(li) == 2 and li[0] != "user" and li[0] != "getlist"):
                 choice = li[0]
                 contest_c = li[1]
                 # print("Enter\np-Practice\nc-Contest\n")
@@ -234,7 +238,29 @@ def login():
                         test.Test_ac(f'{contest_c}/{xc}',
                                      'Test_files', xc, lang, s)
                     elif(inp == 'race'):  # complete
-                        contest.race(s, contest_c)
+                        try:
+                            if(one_time_login == 0):
+                                while(1):
+                                    print(
+                                        colored("Logging in...", "green"), end="\r")
+                                    ti = time.time()
+                                    p = s.get(
+                                        "https://www.codechef.com/", headers=headers)
+                                    soup = bs4.BeautifulSoup(
+                                        p.text, 'html.parser')
+                                    if(type(soup) != type(None)):
+                                        break
+                                a = soup.find('input', attrs={"name": 'form_build_id'})[
+                                    'value']
+                                payload['form_build_id'] = a
+                                s.post('https://www.codechef.com/',
+                                       data=payload, headers=headers)
+                                # print(time.time()-ti)
+                                print(colored("Logged in     ", "green"))
+                                one_time_login = 1
+                            contest.race(s, contest_c)
+                        except:
+                            pass
                     elif(inp == "parse" and choice == "p"):
                         try:
                             make_dir.parse(s, contest_c, choice)
@@ -290,10 +316,8 @@ def login():
                 with requests.Session() as s:
                     contest.get_comp(s, 0, 2)
                 print("Past Contests")
-            elif(li[0] == "race"):
-                with requests.Session() as s:
-                    #cont = input("Enter name of contest: ")
-                    contest.race(s, li[1])
+            # elif(li[0] == "race"):
+
                 #print("Entering Race")
             elif(li[0] == "user"):
                 with requests.Session() as s:
@@ -335,7 +359,7 @@ def login():
 
 
 if __name__ == "__main__":
-    one_time_login = 0
+    #one_time_login = 0
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:67.0) Gecko/20100101 Firefox/67.0',
         'cache-control': 'private, max-age=0, no-cache'

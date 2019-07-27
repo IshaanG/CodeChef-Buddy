@@ -15,9 +15,10 @@ def get_comp(s, x, q):
             url = 'https://www.codechef.com/contests'
             z = s.get(url)
             soup = bs4.BeautifulSoup(z.text, 'html.parser')
-            # print(table)
             table = soup.find_all('table', attrs={'class': 'dataTable'})[q]
             table = table.find('tbody')
+            # print(table)
+
             if(x == 0):
                 print(colored(table.text, "green"))
             break
@@ -66,6 +67,7 @@ def countdown(ctime, s, pname, x):
         print(contest_time-current_time, end="\r")
         i = i + 1
         time.sleep(1)
+    time.sleep(2)
     make_dir.parse(s, pname, "c")
     #
     # print("he")
