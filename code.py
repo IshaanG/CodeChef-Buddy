@@ -4,6 +4,7 @@ import requests
 import time
 import contest
 import test
+import ranking
 import webbrowser
 import make_dir
 from termcolor import colored
@@ -307,6 +308,10 @@ def login():
                     for i in range(1, 1+int(li[2])*3, 3):
                         print(colored(il[i].text, "yellow"))
                     # print(soup)
+            elif(li[0]=="getranking"):
+                inp=input("Enter College name")
+                inp1=input("Enter number of users")
+                ranking.getranking(inp,int(inp1))
             elif(li[0] == "help"):
                 print(colored("c <Contest Name> - To enter codechef in contest mode\np <Question Name> - To enter codechef in practice mode\nuser <username> - To get user information\ngetlist <difficulty> <number> - Gets list of latest practice problems of selected difficulty\nupcontest - To view upcoming contests\nprcontest - To view present contests\npacontest - To view past contests\nrace - To parse contest as soon as contest start\nquit - to logout and quit the program", "cyan"))
 
