@@ -108,8 +108,8 @@ def submit(s, contest_c, lang, xy):
         # print(time.time()-xyz)
         form_build_id = get_id(p.text)
         # print(time.time()-xyz)
-        # print(form_token)
-        # print(form_build_id)
+        print(form_token)
+        print(form_build_id)
         payload = {
             'form_build_id': form_build_id,
             'form_token': form_token,
@@ -125,8 +125,11 @@ def submit(s, contest_c, lang, xy):
         # f2=fi
         # print(f2.read())
         myfile = {'files[sourcefile]': fi}
-        obj = s.post(
-            f"https://www.codechef.com/{contest_c}/submit/{prob}", data=payload, files=myfile, headers=headers)
+        if(xy!='p'):
+            obj = s.post(f"https://www.codechef.com/{contest_c}/submit/{prob}", data=payload, files=myfile, headers=headers)
+        else:
+            obj = s.post(f"https://www.codechef.com/submit/{prob}", data=payload, files=myfile, headers=headers)
+
         x = obj.url.split('/')[-1]
         if(x.isdigit() == True):
             print(colored(f"Submission id: {x}", "blue"))
@@ -298,7 +301,8 @@ def login():
                             ti2 = time.time()
                             submit(s, contest_c, lang, 'p')
                             # print(time.time()-ti2)
-                        except:
+                        except Exception as e:
+                            print(e)
                             logout(s)
                     elif(inp == "help"):
                         print(colored("parse - Parsing Contest or Problem\nsubmit-Submitting Problem\nopen-Opening question\ntest-To test your cases against standard io\nctest-To test custom cases against custom io\nquit-To leave the current mode", "cyan"))
